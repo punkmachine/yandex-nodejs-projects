@@ -5,7 +5,7 @@ import { AuthenticatedRequest } from '../types/express';
 import UserModel from '../models/user';
 import NotFoundError from '../helpers/errors/not-found-error';
 import UnauthorizedError from '../helpers/errors/unauthorized-error';
-import { STATUS_OK, STATUS_CREATED } from '../helpers/constants/statusCodes';
+import HttpStatus from '../helpers/constants/statusCodes';
 
 const { JWT_SECRET } = process.env;
 
@@ -13,7 +13,7 @@ export const getUsers = async (req: Request, res: Response, next: NextFunction) 
   try {
     const users = await UserModel.find({});
 
-    res.status(STATUS_OK).send({ data: users });
+    res.send({ data: users });
   } catch (error) {
     next(error);
   }
@@ -27,7 +27,7 @@ export const getUserById = async (req: Request, res: Response, next: NextFunctio
       throw new NotFoundError('Пользователь не найден');
     }
 
-    res.status(STATUS_OK).send({ data: user });
+    res.send({ data: user });
   } catch (error) {
     next(error);
   }
@@ -47,7 +47,7 @@ export const getCurrentUser = async (
       throw new NotFoundError('Пользователь не найден');
     }
 
-    res.status(STATUS_OK).send({ data: user });
+    res.send({ data: user });
   } catch (error) {
     next(error);
   }
@@ -65,7 +65,7 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
       name, about, avatar, email, password: hashedPassword,
     });
 
-    res.status(STATUS_CREATED).send({ data: user });
+    res.status(HttpStatus.CREATED).send({ data: user });
   } catch (error) {
     next(error);
   }
@@ -94,7 +94,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 дней
     });
 
-    res.status(STATUS_OK).send({ message: 'Успешная авторизация' });
+    res.send({ message: 'Успешная авторизация' });
   } catch (error) {
     next(error);
   }
@@ -119,7 +119,7 @@ export const updateProfile = async (
       throw new NotFoundError('Пользователь не найден');
     }
 
-    res.status(STATUS_OK).send({ data: user });
+    res.send({ data: user });
   } catch (error) {
     next(error);
   }
@@ -144,7 +144,7 @@ export const updateAvatar = async (
       throw new NotFoundError('Пользователь не найден');
     }
 
-    res.status(STATUS_OK).send({ data: user });
+    res.send({ data: user });
   } catch (error) {
     next(error);
   }

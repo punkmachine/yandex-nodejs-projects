@@ -13,7 +13,8 @@ export default (req: Request, res: Response, next: NextFunction): void => {
   const token = req.cookies?.jwt;
 
   if (!token) {
-    throw new UnauthorizedError('Необходима авторизация');
+    next(new UnauthorizedError('Необходима авторизация'));
+    return;
   }
 
   let payload: JwtPayload;
@@ -21,7 +22,8 @@ export default (req: Request, res: Response, next: NextFunction): void => {
   try {
     payload = jwt.verify(token, JWT_SECRET!) as JwtPayload;
   } catch (err) {
-    throw new UnauthorizedError('Необходима авторизация');
+    next(err);
+    return;
   }
 
   (req as AuthenticatedRequest).user = payload;

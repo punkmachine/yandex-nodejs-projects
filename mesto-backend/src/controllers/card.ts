@@ -5,13 +5,13 @@ import CardModel from '../models/card';
 import NotFoundError from '../helpers/errors/not-found-error';
 import UnauthorizedError from '../helpers/errors/unauthorized-error';
 import ForbiddenError from '../helpers/errors/forbidden-error';
-import { STATUS_OK, STATUS_CREATED } from '../helpers/constants/statusCodes';
+import HttpStatus from '../helpers/constants/statusCodes';
 
 export const getCards = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const cards = await CardModel.find({}).populate('owner');
 
-    res.status(STATUS_OK).send({ data: cards });
+    res.send({ data: cards });
   } catch (error) {
     next(error);
   }
@@ -30,7 +30,7 @@ export const createCard = async (req: AuthenticatedRequest, res: Response, next:
 
     await card.populate('owner');
 
-    res.status(STATUS_CREATED).send({ data: card });
+    res.status(HttpStatus.CREATED).send({ data: card });
   } catch (error) {
     next(error);
   }
@@ -53,7 +53,7 @@ export const deleteCard = async (req: AuthenticatedRequest, res: Response, next:
 
     await CardModel.findByIdAndDelete(cardId);
 
-    res.status(STATUS_OK).send({ message: 'Карточка успешно удалена' });
+    res.send({ message: 'Карточка успешно удалена' });
   } catch (error) {
     next(error);
   }
@@ -74,7 +74,7 @@ export const likeCard = async (req: AuthenticatedRequest, res: Response, next: N
       throw new NotFoundError('Карточка не найдена');
     }
 
-    res.status(STATUS_OK).send({ data: card });
+    res.send({ data: card });
   } catch (error) {
     next(error);
   }
@@ -95,7 +95,7 @@ export const dislikeCard = async (req: AuthenticatedRequest, res: Response, next
       throw new NotFoundError('Карточка не найдена');
     }
 
-    res.status(STATUS_OK).send({ data: card });
+    res.send({ data: card });
   } catch (error) {
     next(error);
   }

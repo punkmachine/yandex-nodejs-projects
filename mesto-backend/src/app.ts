@@ -8,15 +8,14 @@ import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import { errors } from 'celebrate';
 
-import userRouter from './routes/user';
-import cardRouter from './routes/card';
+import routes from './routes';
 import { createUser, login } from './controllers/user';
 import { createUserValidation, loginValidation } from './helpers/validations/userValidations';
 
 import auth from './middlewares/auth';
+import HttpStatus from './helpers/constants/statusCodes';
 
 import { requestLogger, errorLogger } from './middlewares/logger';
-import { STATUS_CONFLICT, STATUS_INTERNAL_SERVER_ERROR, STATUS_NOT_FOUND } from './helpers/constants/statusCodes';
 
 const {
   MONGO_URL,
@@ -43,15 +42,11 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(helmet());
 
-// Роуты для регистрации и авторизации
 app.post('/signup', createUserValidation, createUser);
 app.post('/signin', loginValidation, login);
 
-// Защита всех роутов авторизацией
 app.use(auth);
-
-app.use('/users', userRouter);
-app.use('/cards', cardRouter);
+app.use(routes);
 
 app.use(errorLogger);
 
@@ -59,7 +54,7 @@ app.use(errors());
 
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   if (err.code === 11000) {
-    res.status(STATUS_CONFLICT).send({
+    res.status(HttpStatus.CONFLICT).send({
       message: 'Пользователь с таким email уже существует',
     });
 
@@ -67,19 +62,19 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
   }
 
   if (err.name === 'CastError') {
-    res.status(STATUS_NOT_FOUND).send({
+    res.status(HttpStatus.NOT_FOUND).send({
       message: 'Ресурс не найден',
     });
 
     return;
   }
 
-  const { statusCode = STATUS_INTERNAL_SERVER_ERROR, message } = err;
+  const { statusCode = HttpStatus.INTERNAL_SERVER_ERROR, message } = err;
 
   res
     .status(statusCode)
     .send({
-      message: statusCode === STATUS_INTERNAL_SERVER_ERROR
+      message: statusCode === HttpStatus.INTERNAL_SERVER_ERROR
         ? 'На сервере произошла ошибка'
         : message,
     });
