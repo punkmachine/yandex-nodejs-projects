@@ -1,15 +1,16 @@
 import { type Response, type Request, type NextFunction } from 'express';
 import CardModel from '../models/card';
 
-import NotFoundError from '../errors/not-found-error';
-import UnauthorizedError from '../errors/unauthorized-error';
-import ForbiddenError from '../errors/forbidden-error';
+import NotFoundError from '../helpers/errors/not-found-error';
+import UnauthorizedError from '../helpers/errors/unauthorized-error';
+import ForbiddenError from '../helpers/errors/forbidden-error';
+import { STATUS_OK, STATUS_CREATED } from '../helpers/constants/statusCodes';
 
 export const getCards = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const cards = await CardModel.find({}).populate('owner');
 
-    res.status(200).send({ data: cards });
+    res.status(STATUS_OK).send({ data: cards });
   } catch (error) {
     next(error);
   }
@@ -29,7 +30,7 @@ export const createCard = async (req: Request, res: Response, next: NextFunction
 
     await card.populate('owner');
 
-    res.status(201).send({ data: card });
+    res.status(STATUS_CREATED).send({ data: card });
   } catch (error) {
     next(error);
   }
@@ -53,7 +54,7 @@ export const deleteCard = async (req: Request, res: Response, next: NextFunction
 
     await CardModel.findByIdAndDelete(cardId);
 
-    res.status(200).send({ message: 'Карточка успешно удалена' });
+    res.status(STATUS_OK).send({ message: 'Карточка успешно удалена' });
   } catch (error) {
     next(error);
   }
@@ -75,7 +76,7 @@ export const likeCard = async (req: Request, res: Response, next: NextFunction) 
       throw new NotFoundError('Карточка не найдена');
     }
 
-    res.status(200).send({ data: card });
+    res.status(STATUS_OK).send({ data: card });
   } catch (error) {
     next(error);
   }
@@ -97,7 +98,7 @@ export const dislikeCard = async (req: Request, res: Response, next: NextFunctio
       throw new NotFoundError('Карточка не найдена');
     }
 
-    res.status(200).send({ data: card });
+    res.status(STATUS_OK).send({ data: card });
   } catch (error) {
     next(error);
   }

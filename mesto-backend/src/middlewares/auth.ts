@@ -1,6 +1,6 @@
 import { type Request, type Response, type NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import UnauthorizedError from '../errors/unauthorized-error';
+import UnauthorizedError from '../helpers/errors/unauthorized-error';
 
 const { JWT_SECRET } = process.env;
 

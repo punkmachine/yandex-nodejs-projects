@@ -1,5 +1,6 @@
 import { model, Schema } from 'mongoose';
 import validator from 'validator';
+import URL_PATTERN from '../helpers/constants/regex';
 
 export interface User {
   name: string;
@@ -25,7 +26,7 @@ const userSchema = new Schema<User>({
   avatar: {
     type: String,
     validate: {
-      validator: (v: string) => v.startsWith('https://'),
+      validator: (v: string) => URL_PATTERN.test(v),
       message: 'Некорректный URL аватара',
     },
     default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',

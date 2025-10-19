@@ -2,8 +2,9 @@ import { type Request, type Response, type NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import UserModel from '../models/user';
-import NotFoundError from '../errors/not-found-error';
-import UnauthorizedError from '../errors/unauthorized-error';
+import NotFoundError from '../helpers/errors/not-found-error';
+import UnauthorizedError from '../helpers/errors/unauthorized-error';
+import { STATUS_OK, STATUS_CREATED } from '../helpers/constants/statusCodes';
 
 const { JWT_SECRET } = process.env;
 
@@ -11,7 +12,7 @@ export const getUsers = async (req: Request, res: Response, next: NextFunction) 
   try {
     const users = await UserModel.find({});
 
-    res.status(200).send({ data: users });
+    res.status(STATUS_OK).send({ data: users });
   } catch (error) {
     next(error);
   }
@@ -25,7 +26,7 @@ export const getUserById = async (req: Request, res: Response, next: NextFunctio
       throw new NotFoundError('Пользователь не найден');
     }
 
-    res.status(200).send({ data: user });
+    res.status(STATUS_OK).send({ data: user });
   } catch (error) {
     next(error);
   }
@@ -42,7 +43,7 @@ export const getCurrentUser = async (req: Request, res: Response, next: NextFunc
       throw new NotFoundError('Пользователь не найден');
     }
 
-    res.status(200).send({ data: user });
+    res.status(STATUS_OK).send({ data: user });
   } catch (error) {
     next(error);
   }
@@ -60,7 +61,7 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
       name, about, avatar, email, password: hashedPassword,
     });
 
-    res.status(201).send({ data: user });
+    res.status(STATUS_CREATED).send({ data: user });
   } catch (error) {
     next(error);
   }
@@ -89,7 +90,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 дней
     });
 
-    res.status(200).send({ message: 'Успешная авторизация' });
+    res.status(STATUS_OK).send({ message: 'Успешная авторизация' });
   } catch (error) {
     next(error);
   }
@@ -111,7 +112,7 @@ export const updateProfile = async (req: Request, res: Response, next: NextFunct
       throw new NotFoundError('Пользователь не найден');
     }
 
-    res.status(200).send({ data: user });
+    res.status(STATUS_OK).send({ data: user });
   } catch (error) {
     next(error);
   }
@@ -133,7 +134,7 @@ export const updateAvatar = async (req: Request, res: Response, next: NextFuncti
       throw new NotFoundError('Пользователь не найден');
     }
 
-    res.status(200).send({ data: user });
+    res.status(STATUS_OK).send({ data: user });
   } catch (error) {
     next(error);
   }

@@ -1,10 +1,11 @@
 import { celebrate, Joi } from 'celebrate';
+import URL_PATTERN from '../constants/regex';
 
 export const createUserValidation = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(200),
-    avatar: Joi.string().uri().pattern(/^https?:\/\//),
+    avatar: Joi.string().pattern(URL_PATTERN),
     email: Joi.string().required().email(),
     password: Joi.string().required(),
   }),
@@ -32,6 +33,6 @@ export const updateProfileValidation = celebrate({
 
 export const updateAvatarValidation = celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string().required().uri().pattern(/^https?:\/\//),
+    avatar: Joi.string().required().pattern(URL_PATTERN),
   }),
 });

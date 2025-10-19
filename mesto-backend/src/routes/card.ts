@@ -6,13 +6,13 @@ import {
   likeCard,
   dislikeCard,
 } from '../controllers/card';
-import { createCardValidation, cardIdValidation } from '../helpers/cardValidations';
+import { createCardValidation, cardIdValidation, deleteCardValidation } from '../helpers/validations/cardValidations';
 
 const router = Router();
 
 router.get('/', getCards);
 router.post('/', createCardValidation, createCard);
-router.delete('/:id', deleteCard);
+router.delete('/:id', deleteCardValidation, deleteCard);
 router.put('/:cardId/likes', cardIdValidation, likeCard);
 router.delete('/:cardId/likes', cardIdValidation, dislikeCard);
 

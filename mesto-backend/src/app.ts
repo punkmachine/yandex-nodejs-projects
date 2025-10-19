@@ -9,11 +9,12 @@ import { errors } from 'celebrate';
 import userRouter from './routes/user';
 import cardRouter from './routes/card';
 import { createUser, login } from './controllers/user';
-import { createUserValidation, loginValidation } from './helpers/userValidations';
+import { createUserValidation, loginValidation } from './helpers/validations/userValidations';
 
 import auth from './middlewares/auth';
 
 import { requestLogger, errorLogger } from './middlewares/logger';
+import { STATUS_CONFLICT, STATUS_INTERNAL_SERVER_ERROR } from './helpers/constants/statusCodes';
 
 const {
   MONGO_URL,
@@ -55,12 +56,20 @@ app.use(errorLogger);
 app.use(errors());
 
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  const { statusCode = 500, message } = err;
+  if (err.code === 11000) {
+    res.status(STATUS_CONFLICT).send({
+      message: 'Пользователь с таким email уже существует',
+    });
+
+    return;
+  }
+
+  const { statusCode = STATUS_INTERNAL_SERVER_ERROR, message } = err;
 
   res
     .status(statusCode)
     .send({
-      message: statusCode === 500
+      message: statusCode === STATUS_INTERNAL_SERVER_ERROR
         ? 'На сервере произошла ошибка'
         : message,
     });

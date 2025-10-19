@@ -10,7 +10,7 @@ import {
   getUserByIdValidation,
   updateProfileValidation,
   updateAvatarValidation,
-} from '../helpers/userValidations';
+} from '../helpers/validations/userValidations';
 
 const router = Router();
 
