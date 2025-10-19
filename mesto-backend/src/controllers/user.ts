@@ -40,7 +40,8 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
 
 export const updateProfile = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = req.user!._id;
+    // @ts-ignore
+    const userId = req.user._id;
     const { name, about } = req.body;
 
     const user = await UserModel.findByIdAndUpdate(
@@ -61,7 +62,8 @@ export const updateProfile = async (req: Request, res: Response, next: NextFunct
 
 export const updateAvatar = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = req.user!._id;
+    // @ts-ignore
+    const userId = req.user._id;
     const { avatar } = req.body;
 
     const user = await UserModel.findByIdAndUpdate(

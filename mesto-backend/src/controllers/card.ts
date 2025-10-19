@@ -16,8 +16,8 @@ export const getCards = async (req: Request, res: Response, next: NextFunction) 
 export const createCard = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { name, link } = req.body;
-    // временное решение для авторизации
-    const ownerId = req.user!._id;
+    // @ts-ignore
+    const ownerId = req.user._id;
 
     if (!ownerId) {
       throw new UnauthorizedError('Необходима авторизация');
@@ -36,7 +36,8 @@ export const createCard = async (req: Request, res: Response, next: NextFunction
 export const deleteCard = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const cardId = req.params.id;
-    const userId = req.user!._id;
+    // @ts-ignore
+    const userId = req.user._id;
 
     const card = await CardModel.findById(cardId);
 
@@ -59,7 +60,8 @@ export const deleteCard = async (req: Request, res: Response, next: NextFunction
 export const likeCard = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const cardId = req.params.cardId;
-    const userId = req.user!._id;
+    // @ts-ignore
+    const userId = req.user._id;
 
     const card = await CardModel.findByIdAndUpdate(
       cardId,
@@ -80,7 +82,8 @@ export const likeCard = async (req: Request, res: Response, next: NextFunction) 
 export const dislikeCard = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const cardId = req.params.cardId;
-    const userId = req.user!._id;
+    // @ts-ignore
+    const userId = req.user._id;
 
     const card = await CardModel.findByIdAndUpdate(
       cardId,

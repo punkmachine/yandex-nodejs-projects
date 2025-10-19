@@ -37,6 +37,7 @@ app.use(helmet());
 
 // Временное решение авторизации
 app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+  // @ts-ignore
   req.user = {
     _id: '68f486669ad1e5c719525d0b'
   };
