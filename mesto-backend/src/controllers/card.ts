@@ -3,7 +3,7 @@ import CardModel from '../models/card';
 
 import NotFoundError from '../errors/not-found-error';
 import UnauthorizedError from '../errors/unauthorized-error';
-import ValidationError from '../errors/validation-error';
+import ForbiddenError from '../errors/forbidden-error';
 
 export const getCards = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -48,7 +48,7 @@ export const deleteCard = async (req: Request, res: Response, next: NextFunction
     }
 
     if (card.owner.toString() !== userId) {
-      throw new ValidationError('Вы не можете удалить карточку, которую создал другой пользователь');
+      throw new ForbiddenError('Вы не можете удалить карточку, которую создал другой пользователь');
     }
 
     await CardModel.findByIdAndDelete(cardId);
