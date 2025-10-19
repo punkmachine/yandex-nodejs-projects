@@ -3,6 +3,7 @@ import 'dotenv/config';
 import express from 'express';
 import helmet from 'helmet';
 import mongoose from 'mongoose';
+import cookieParser from 'cookie-parser';
 import { errors } from 'celebrate';
 
 import userRouter from './routes/user';
@@ -34,6 +35,7 @@ mongoose.connect(MONGO_URL)
 app.use(requestLogger);
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(helmet());
 
 // Роуты для регистрации и авторизации
