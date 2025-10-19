@@ -1,4 +1,4 @@
-export class ForbiddenError extends Error {
+class ForbiddenError extends Error {
   public statusCode: number;
 
   constructor(message: string) {
@@ -7,3 +7,5 @@ export class ForbiddenError extends Error {
     this.name = 'ForbiddenError';
   }
 }
+
+export default ForbiddenError;

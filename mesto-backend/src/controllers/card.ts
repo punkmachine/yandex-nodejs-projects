@@ -1,6 +1,9 @@
 import { type Response, type Request, type NextFunction } from 'express';
 import CardModel from '../models/card';
-import { NotFoundError, UnauthorizedError, ForbiddenError } from '../errors';
+
+import NotFoundError from '../errors/not-found-error';
+import UnauthorizedError from '../errors/unauthorized-error';
+import ForbiddenError from '../errors/forbidden-error';
 
 export const getCards = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -11,7 +14,6 @@ export const getCards = async (req: Request, res: Response, next: NextFunction) 
     next(error);
   }
 };
-
 
 export const createCard = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -59,14 +61,14 @@ export const deleteCard = async (req: Request, res: Response, next: NextFunction
 
 export const likeCard = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const cardId = req.params.cardId;
+    const { cardId } = req.params;
     // @ts-ignore
     const userId = req.user._id;
 
     const card = await CardModel.findByIdAndUpdate(
       cardId,
       { $addToSet: { likes: userId } },
-      { new: true }
+      { new: true },
     ).populate(['owner', 'likes']);
 
     if (!card) {
@@ -81,14 +83,14 @@ export const likeCard = async (req: Request, res: Response, next: NextFunction) 
 
 export const dislikeCard = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const cardId = req.params.cardId;
+    const { cardId } = req.params;
     // @ts-ignore
     const userId = req.user._id;
 
     const card = await CardModel.findByIdAndUpdate(
       cardId,
       { $pull: { likes: userId } },
-      { new: true }
+      { new: true },
     ).populate(['owner', 'likes']);
 
     if (!card) {

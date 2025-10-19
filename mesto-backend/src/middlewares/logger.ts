@@ -9,7 +9,7 @@ const errorTransport = new winston.transports.DailyRotateFile({
   zippedArchive: true,
   maxSize: '20m',
   maxFiles: '14d',
-  level: 'error'
+  level: 'error',
 });
 
 const requestTransport = new winston.transports.DailyRotateFile({
@@ -18,7 +18,7 @@ const requestTransport = new winston.transports.DailyRotateFile({
   zippedArchive: true,
   maxSize: '20m',
   maxFiles: '14d',
-  level: 'info'
+  level: 'info',
 });
 
 export const requestLogger = expressWinston.logger({
@@ -27,7 +27,7 @@ export const requestLogger = expressWinston.logger({
     new winston.transports.Console({
       format: winston.format.combine(
         winston.format.colorize(),
-        winston.format.simple()
+        winston.format.simple(),
       ),
     }),
     // Для файлов
@@ -35,10 +35,10 @@ export const requestLogger = expressWinston.logger({
   ],
   format: winston.format.combine(
     winston.format.timestamp(),
-    winston.format.json()
+    winston.format.json(),
   ),
   meta: true,
-  msg: "HTTP {{req.method}} {{req.url}}",
+  msg: 'HTTP {{req.method}} {{req.url}}',
   expressFormat: true,
   colorize: false,
 });
@@ -51,13 +51,13 @@ export const errorLogger = expressWinston.errorLogger({
     new winston.transports.Console({
       format: winston.format.combine(
         winston.format.colorize(),
-        winston.format.simple()
+        winston.format.simple(),
       ),
     }),
   ],
   format: winston.format.combine(
     winston.format.timestamp(),
-    winston.format.json()
+    winston.format.json(),
   ),
 });
 
@@ -67,13 +67,13 @@ export const logger = winston.createLogger({
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.errors({ stack: true }),
-    winston.format.json()
+    winston.format.json(),
   ),
   transports: [
     new winston.transports.Console({
       format: winston.format.combine(
         winston.format.colorize(),
-        winston.format.simple()
+        winston.format.simple(),
       ),
     }),
     new winston.transports.DailyRotateFile({

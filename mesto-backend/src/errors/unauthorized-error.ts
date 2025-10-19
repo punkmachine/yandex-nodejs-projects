@@ -1,4 +1,4 @@
-export class UnauthorizedError extends Error {
+class UnauthorizedError extends Error {
   public statusCode: number;
 
   constructor(message: string) {
@@ -7,3 +7,5 @@ export class UnauthorizedError extends Error {
     this.name = 'UnauthorizedError';
   }
 }
+
+export default UnauthorizedError;

@@ -10,7 +10,12 @@ import cardRouter from './routes/card';
 
 import { requestLogger, errorLogger } from './middlewares/logger';
 
-const { DB_NAME, DB_HOST, DB_PORT, PORT = 3000 } = process.env;
+const {
+  DB_NAME,
+  DB_HOST,
+  DB_PORT,
+  PORT = 3000,
+} = process.env;
 
 if (!DB_NAME || !DB_HOST || !DB_PORT) {
   process.exit(1);
@@ -24,9 +29,7 @@ mongoose.connect(MONGO_URL)
   .then(() => {
     console.log('Успешное подключение к MongoDB');
   })
-  .catch((error) => {
-    console.error('Ошибка подключения к MongoDB:', error.message);
-    console.error('Убедитесь, что MongoDB запущен и доступен по адресу:', MONGO_URL);
+  .catch(() => {
     process.exit(1);
   });
 
@@ -39,7 +42,7 @@ app.use(helmet());
 app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
   // @ts-ignore
   req.user = {
-    _id: '68f486669ad1e5c719525d0b'
+    _id: '68f486669ad1e5c719525d0b',
   };
 
   next();
@@ -60,7 +63,7 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
     .send({
       message: statusCode === 500
         ? 'На сервере произошла ошибка'
-        : message
+        : message,
     });
 
   next();

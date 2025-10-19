@@ -11,21 +11,21 @@ const userSchema = new Schema<User>({
     type: String,
     minlength: 2,
     maxlength: 30,
-    required: true
+    required: true,
   },
   about: {
     type: String,
     minlength: 2,
     maxlength: 200,
-    required: true
+    required: true,
   },
   avatar: {
     type: String,
     validate: {
       validator: (v: string) => v.startsWith('https://'),
-      message: 'Некорректный URL аватара'
+      message: 'Некорректный URL аватара',
     },
-    required: true
+    required: true,
   },
 });
 

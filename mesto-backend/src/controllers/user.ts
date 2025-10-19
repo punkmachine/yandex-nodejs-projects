@@ -1,6 +1,6 @@
 import { type Request, type Response, type NextFunction } from 'express';
 import UserModel from '../models/user';
-import { NotFoundError } from '../errors';
+import NotFoundError from '../errors/not-found-error';
 
 export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -47,7 +47,7 @@ export const updateProfile = async (req: Request, res: Response, next: NextFunct
     const user = await UserModel.findByIdAndUpdate(
       userId,
       { name, about },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
 
     if (!user) {
@@ -69,7 +69,7 @@ export const updateAvatar = async (req: Request, res: Response, next: NextFuncti
     const user = await UserModel.findByIdAndUpdate(
       userId,
       { avatar },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
 
     if (!user) {

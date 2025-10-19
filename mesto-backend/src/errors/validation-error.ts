@@ -1,4 +1,4 @@
-export class ValidationError extends Error {
+class ValidationError extends Error {
   public statusCode: number;
 
   constructor(message: string) {
@@ -7,3 +7,5 @@ export class ValidationError extends Error {
     this.name = 'ValidationError';
   }
 }
+
+export default ValidationError;

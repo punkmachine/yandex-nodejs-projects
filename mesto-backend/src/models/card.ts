@@ -13,29 +13,29 @@ const cardSchema = new Schema<Card>({
     type: String,
     minlength: 2,
     maxlength: 30,
-    required: true
+    required: true,
   },
   link: {
     type: String,
     validate: {
       validator: (v: string) => v.startsWith('https://'),
-      message: 'Некорректный URL картинки'
+      message: 'Некорректный URL картинки',
     },
-    required: true
+    required: true,
   },
   owner: {
     type: Schema.Types.ObjectId,
     ref: 'User',
-    required: true
+    required: true,
   },
   likes: {
     type: [Schema.Types.ObjectId],
     ref: 'User',
-    default: []
+    default: [],
   },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
 });
 
