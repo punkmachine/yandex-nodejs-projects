@@ -7,6 +7,8 @@ import { errors } from 'celebrate';
 
 import userRouter from './routes/user';
 import cardRouter from './routes/card';
+import { createUser, login } from './controllers/user';
+import { createUserValidation, loginValidation } from './helpers/userValidations';
 
 import { requestLogger, errorLogger } from './middlewares/logger';
 
@@ -33,6 +35,10 @@ app.use(requestLogger);
 
 app.use(express.json());
 app.use(helmet());
+
+// Роуты для регистрации и авторизации
+app.post('/signup', createUserValidation, createUser);
+app.post('/signin', loginValidation, login);
 
 // Временное решение авторизации
 app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
