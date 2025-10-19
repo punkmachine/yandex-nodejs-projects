@@ -1,6 +1,7 @@
 import { type Request, type Response, type NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { AuthenticatedRequest } from '../types/express';
 import UserModel from '../models/user';
 import NotFoundError from '../helpers/errors/not-found-error';
 import UnauthorizedError from '../helpers/errors/unauthorized-error';
@@ -32,9 +33,12 @@ export const getUserById = async (req: Request, res: Response, next: NextFunctio
   }
 };
 
-export const getCurrentUser = async (req: Request, res: Response, next: NextFunction) => {
+export const getCurrentUser = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
-    // @ts-ignore
     const userId = req.user._id;
 
     const user = await UserModel.findById(userId);
@@ -96,9 +100,12 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
   }
 };
 
-export const updateProfile = async (req: Request, res: Response, next: NextFunction) => {
+export const updateProfile = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
-    // @ts-ignore
     const userId = req.user._id;
     const { name, about } = req.body;
 
@@ -118,9 +125,12 @@ export const updateProfile = async (req: Request, res: Response, next: NextFunct
   }
 };
 
-export const updateAvatar = async (req: Request, res: Response, next: NextFunction) => {
+export const updateAvatar = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
-    // @ts-ignore
     const userId = req.user._id;
     const { avatar } = req.body;
 

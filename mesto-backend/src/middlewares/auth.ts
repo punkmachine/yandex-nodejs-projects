@@ -1,5 +1,6 @@
 import { type Request, type Response, type NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { AuthenticatedRequest } from '../types/express';
 import UnauthorizedError from '../helpers/errors/unauthorized-error';
 
 const { JWT_SECRET } = process.env;
@@ -8,7 +9,7 @@ interface JwtPayload {
   _id: string;
 }
 
-export default (req: Request, res: Response, next: NextFunction) => {
+export default (req: Request, res: Response, next: NextFunction): void => {
   const token = req.cookies?.jwt;
 
   if (!token) {
@@ -23,8 +24,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
     throw new UnauthorizedError('Необходима авторизация');
   }
 
-  // @ts-ignore
-  req.user = payload;
+  (req as AuthenticatedRequest).user = payload;
 
   next();
 };

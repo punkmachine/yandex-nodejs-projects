@@ -1,5 +1,7 @@
 import 'dotenv/config';
 
+import './types/express';
+
 import express from 'express';
 import helmet from 'helmet';
 import mongoose from 'mongoose';
@@ -14,7 +16,7 @@ import { createUserValidation, loginValidation } from './helpers/validations/use
 import auth from './middlewares/auth';
 
 import { requestLogger, errorLogger } from './middlewares/logger';
-import { STATUS_CONFLICT, STATUS_INTERNAL_SERVER_ERROR } from './helpers/constants/statusCodes';
+import { STATUS_CONFLICT, STATUS_INTERNAL_SERVER_ERROR, STATUS_NOT_FOUND } from './helpers/constants/statusCodes';
 
 const {
   MONGO_URL,
@@ -59,6 +61,14 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
   if (err.code === 11000) {
     res.status(STATUS_CONFLICT).send({
       message: 'Пользователь с таким email уже существует',
+    });
+
+    return;
+  }
+
+  if (err.name === 'CastError') {
+    res.status(STATUS_NOT_FOUND).send({
+      message: 'Ресурс не найден',
     });
 
     return;

@@ -11,9 +11,9 @@ import { createCardValidation, cardIdValidation, deleteCardValidation } from '..
 const router = Router();
 
 router.get('/', getCards);
-router.post('/', createCardValidation, createCard);
-router.delete('/:id', deleteCardValidation, deleteCard);
-router.put('/:cardId/likes', cardIdValidation, likeCard);
-router.delete('/:cardId/likes', cardIdValidation, dislikeCard);
+router.post('/', createCardValidation, createCard as any);
+router.delete('/:id', deleteCardValidation, deleteCard as any);
+router.put('/:cardId/likes', cardIdValidation, likeCard as any);
+router.delete('/:cardId/likes', cardIdValidation, dislikeCard as any);
 
 export default router;

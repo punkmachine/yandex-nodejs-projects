@@ -1,4 +1,5 @@
 import { type Response, type Request, type NextFunction } from 'express';
+import { AuthenticatedRequest } from '../types/express';
 import CardModel from '../models/card';
 
 import NotFoundError from '../helpers/errors/not-found-error';
@@ -16,10 +17,9 @@ export const getCards = async (req: Request, res: Response, next: NextFunction) 
   }
 };
 
-export const createCard = async (req: Request, res: Response, next: NextFunction) => {
+export const createCard = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
     const { name, link } = req.body;
-    // @ts-ignore
     const ownerId = req.user._id;
 
     if (!ownerId) {
@@ -36,10 +36,9 @@ export const createCard = async (req: Request, res: Response, next: NextFunction
   }
 };
 
-export const deleteCard = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteCard = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
     const cardId = req.params.id;
-    // @ts-ignore
     const userId = req.user._id;
 
     const card = await CardModel.findById(cardId);
@@ -60,10 +59,9 @@ export const deleteCard = async (req: Request, res: Response, next: NextFunction
   }
 };
 
-export const likeCard = async (req: Request, res: Response, next: NextFunction) => {
+export const likeCard = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
     const { cardId } = req.params;
-    // @ts-ignore
     const userId = req.user._id;
 
     const card = await CardModel.findByIdAndUpdate(
@@ -82,10 +80,9 @@ export const likeCard = async (req: Request, res: Response, next: NextFunction) 
   }
 };
 
-export const dislikeCard = async (req: Request, res: Response, next: NextFunction) => {
+export const dislikeCard = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
     const { cardId } = req.params;
-    // @ts-ignore
     const userId = req.user._id;
 
     const card = await CardModel.findByIdAndUpdate(

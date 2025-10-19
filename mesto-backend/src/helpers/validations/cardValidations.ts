@@ -10,12 +10,12 @@ export const createCardValidation = celebrate({
 
 export const cardIdValidation = celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().required().length(24).hex(),
+    cardId: Joi.string().required(),
   }),
 });
 
 export const deleteCardValidation = celebrate({
   params: Joi.object().keys({
-    id: Joi.string().required().length(24).hex(),
+    id: Joi.string().required(),
   }),
 });

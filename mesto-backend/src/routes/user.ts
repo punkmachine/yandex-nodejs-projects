@@ -15,9 +15,9 @@ import {
 const router = Router();
 
 router.get('/', getUsers);
-router.get('/me', getCurrentUser);
+router.get('/me', getCurrentUser as any);
 router.get('/:id', getUserByIdValidation, getUserById);
-router.patch('/me', updateProfileValidation, updateProfile);
-router.patch('/me/avatar', updateAvatarValidation, updateAvatar);
+router.patch('/me', updateProfileValidation, updateProfile as any);
+router.patch('/me/avatar', updateAvatarValidation, updateAvatar as any);
 
 export default router;
