@@ -55,3 +55,45 @@ export const deleteCard = async (req: Request, res: Response, next: NextFunction
     next(error);
   }
 };
+
+export const likeCard = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const cardId = req.params.cardId;
+    const userId = req.user!._id;
+
+    const card = await CardModel.findByIdAndUpdate(
+      cardId,
+      { $addToSet: { likes: userId } },
+      { new: true }
+    ).populate(['owner', 'likes']);
+
+    if (!card) {
+      throw new NotFoundError('Карточка не найдена');
+    }
+
+    res.status(200).send({ data: card });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const dislikeCard = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const cardId = req.params.cardId;
+    const userId = req.user!._id;
+
+    const card = await CardModel.findByIdAndUpdate(
+      cardId,
+      { $pull: { likes: userId } },
+      { new: true }
+    ).populate(['owner', 'likes']);
+
+    if (!card) {
+      throw new NotFoundError('Карточка не найдена');
+    }
+
+    res.status(200).send({ data: card });
+  } catch (error) {
+    next(error);
+  }
+};

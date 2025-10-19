@@ -6,3 +6,9 @@ export const createCardValidation = celebrate({
     link: Joi.string().required().uri().pattern(/^https?:\/\//),
   }),
 });
+
+export const cardIdValidation = celebrate({
+  params: Joi.object().keys({
+    cardId: Joi.string().required().length(24).hex(),
+  }),
+});
