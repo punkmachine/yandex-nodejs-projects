@@ -1,6 +1,6 @@
-import { type Request, type Response, type NextFunction } from 'express';
+import { type Response, type Request, type NextFunction } from 'express';
 import CardModel from '../models/card';
-import { NotFoundError, UnauthorizedError } from '../errors';
+import { NotFoundError, UnauthorizedError, ForbiddenError } from '../errors';
 
 export const getCards = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -45,8 +45,7 @@ export const deleteCard = async (req: Request, res: Response, next: NextFunction
     }
 
     if (card.owner.toString() !== userId) {
-      // todo: сделай тут 403.
-      throw new UnauthorizedError('Недостаточно прав для удаления карточки');
+      throw new ForbiddenError('Недостаточно прав для удаления карточки');
     }
 
     await CardModel.findByIdAndDelete(cardId);
