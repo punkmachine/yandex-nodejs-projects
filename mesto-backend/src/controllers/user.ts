@@ -37,3 +37,45 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
     next(error);
   }
 };
+
+export const updateProfile = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.user!._id;
+    const { name, about } = req.body;
+
+    const user = await UserModel.findByIdAndUpdate(
+      userId,
+      { name, about },
+      { new: true, runValidators: true }
+    );
+
+    if (!user) {
+      throw new NotFoundError('Пользователь не найден');
+    }
+
+    res.status(200).send({ data: user });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateAvatar = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.user!._id;
+    const { avatar } = req.body;
+
+    const user = await UserModel.findByIdAndUpdate(
+      userId,
+      { avatar },
+      { new: true, runValidators: true }
+    );
+
+    if (!user) {
+      throw new NotFoundError('Пользователь не найден');
+    }
+
+    res.status(200).send({ data: user });
+  } catch (error) {
+    next(error);
+  }
+};
