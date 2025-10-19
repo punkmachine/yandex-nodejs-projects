@@ -2,10 +2,15 @@ import 'dotenv/config';
 
 import express, { Request, Response } from 'express';
 import helmet from 'helmet';
+import mongoose from 'mongoose';
 // import celebrate from 'celebrate';
 
+const { DB_NAME, DB_HOST, DB_PORT, PORT = 3000 } = process.env;
+const MONGO_URL = `mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`;
+
 const app = express();
-const PORT = process.env.PORT || 3000;
+
+mongoose.connect(MONGO_URL);
 
 app.use(express.json());
 app.use(helmet());
