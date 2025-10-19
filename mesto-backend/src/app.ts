@@ -33,6 +33,15 @@ app.use(requestLogger);
 app.use(express.json());
 app.use(helmet());
 
+// Временное решение авторизации
+app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+  req.user = {
+    _id: '68f486669ad1e5c719525d0b'
+  };
+
+  next();
+});
+
 app.use('/users', userRouter);
 
 app.use(errorLogger);
