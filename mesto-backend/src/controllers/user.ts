@@ -31,6 +31,23 @@ export const getUserById = async (req: Request, res: Response, next: NextFunctio
   }
 };
 
+export const getCurrentUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    // @ts-ignore
+    const userId = req.user._id;
+
+    const user = await UserModel.findById(userId);
+
+    if (!user) {
+      throw new NotFoundError('Пользователь не найден');
+    }
+
+    res.status(200).send({ data: user });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const createUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const {

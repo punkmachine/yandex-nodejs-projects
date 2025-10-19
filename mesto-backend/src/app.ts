@@ -11,6 +11,8 @@ import cardRouter from './routes/card';
 import { createUser, login } from './controllers/user';
 import { createUserValidation, loginValidation } from './helpers/userValidations';
 
+import auth from './middlewares/auth';
+
 import { requestLogger, errorLogger } from './middlewares/logger';
 
 const {
@@ -42,15 +44,8 @@ app.use(helmet());
 app.post('/signup', createUserValidation, createUser);
 app.post('/signin', loginValidation, login);
 
-// Временное решение авторизации
-app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
-  // @ts-ignore
-  req.user = {
-    _id: '68f486669ad1e5c719525d0b',
-  };
-
-  next();
-});
+// Защита всех роутов авторизацией
+app.use(auth);
 
 app.use('/users', userRouter);
 app.use('/cards', cardRouter);
