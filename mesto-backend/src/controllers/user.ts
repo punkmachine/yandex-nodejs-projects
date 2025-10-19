@@ -1,7 +1,11 @@
 import { type Request, type Response, type NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import UserModel from '../models/user';
 import NotFoundError from '../errors/not-found-error';
+import UnauthorizedError from '../errors/unauthorized-error';
+
+const { JWT_SECRET } = process.env;
 
 export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -40,6 +44,35 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
     });
 
     res.status(201).send({ data: user });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const login = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await UserModel.findOne({ email }).select('+password');
+
+    if (!user) {
+      throw new UnauthorizedError('Неправильные почта или пароль');
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      throw new UnauthorizedError('Неправильные почта или пароль');
+    }
+
+    const token = jwt.sign({ _id: user._id }, JWT_SECRET!, { expiresIn: '7d' });
+
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 дней
+    });
+
+    res.status(200).send({ message: 'Успешная авторизация' });
   } catch (error) {
     next(error);
   }

@@ -11,17 +11,13 @@ import cardRouter from './routes/card';
 import { requestLogger, errorLogger } from './middlewares/logger';
 
 const {
-  DB_NAME,
-  DB_HOST,
-  DB_PORT,
+  MONGO_URL,
   PORT = 3000,
 } = process.env;
 
-if (!DB_NAME || !DB_HOST || !DB_PORT) {
+if (!MONGO_URL) {
   process.exit(1);
 }
-
-const MONGO_URL = `${DB_HOST}${DB_PORT}/${DB_NAME}`;
 
 const app = express();
 
