@@ -14,13 +14,13 @@ const userSchema = new Schema<User>({
     type: String,
     minlength: 2,
     maxlength: 30,
-    required: true,
+    default: 'Жак-Ив Кусто',
   },
   about: {
     type: String,
     minlength: 2,
     maxlength: 200,
-    required: true,
+    default: 'Исследователь',
   },
   avatar: {
     type: String,
@@ -28,7 +28,7 @@ const userSchema = new Schema<User>({
       validator: (v: string) => v.startsWith('https://'),
       message: 'Некорректный URL аватара',
     },
-    required: true,
+    default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
   },
   email: {
     type: String,

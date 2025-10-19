@@ -1,4 +1,5 @@
 import { type Request, type Response, type NextFunction } from 'express';
+import bcrypt from 'bcryptjs';
 import UserModel from '../models/user';
 import NotFoundError from '../errors/not-found-error';
 
@@ -28,9 +29,15 @@ export const getUserById = async (req: Request, res: Response, next: NextFunctio
 
 export const createUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { name, about, avatar } = req.body;
+    const {
+      name, about, avatar, email, password,
+    } = req.body;
 
-    const user = await UserModel.create({ name, about, avatar });
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await UserModel.create({
+      name, about, avatar, email, password: hashedPassword,
+    });
 
     res.status(201).send({ data: user });
   } catch (error) {
