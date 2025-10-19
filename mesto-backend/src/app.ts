@@ -6,6 +6,8 @@ import mongoose from 'mongoose';
 import { errors } from 'celebrate';
 
 import userRouter from './routes/user';
+import cardRouter from './routes/card';
+
 import { requestLogger, errorLogger } from './middlewares/logger';
 
 const { DB_NAME, DB_HOST, DB_PORT, PORT = 3000 } = process.env;
@@ -43,6 +45,7 @@ app.use((req: express.Request, res: express.Response, next: express.NextFunction
 });
 
 app.use('/users', userRouter);
+app.use('/cards', cardRouter);
 
 app.use(errorLogger);
 
